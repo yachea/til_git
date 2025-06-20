@@ -257,3 +257,92 @@ git branch -d trip  // 삭제 실습
 git merge 대상브랜치이름
 git merge trip
 ```
+
+# Git 관리하기
+
+## 1. 바로 이전 커밋 내용 수정하기
+
+- 커밋을 실행 후 바로 내용을 수정하는 경우
+
+```bash
+git commit --amend 엔터
+
+내용수정 진행 > 저장
+
+git log --oneline 엔터
+```
+
+## 2. 오래전 커밋 내용 수정하기 (권장 안해요)
+
+- 협업에서 문제 발생 소지
+- 커밋 히스토리를 통해서 `해시값` 알아보기
+
+```bash
+git log --oneline 엔터
+```
+
+예제)
+
+```bash
+$ git log --oneline
+d1c3309 (HEAD -> main, origin/main) [docs] 브랜치의 이해
+b69b523 [docs] 깃허브 기본 사용 및 연결법
+189efb5 [docs] 깃허브 명령어를 공부하고 있음.
+bd3256d [커밋타입] 커밋 타이틀
+fea3e3b 깃허브 사용법 정리중
+```
+
+- 해시 값 파악 후 실행(^ 기호는 시작이라는 뜻)
+
+```bash
+git rebase -i 해시값^  엔터
+```
+
+예제)
+
+```bash
+git rebase -i bd3256d^
+```
+
+예제)
+
+```bash
+pick bd3256d [커밋타입] 커밋 타이틀
+pick 189efb5 [docs] 깃허브 명령어를 공부하고 있음.
+pick b69b523 [docs] 깃허브 기본 사용 및 연결법
+pick d1c3309 [docs] 브랜치의 이해
+pick 8459f84 진행중
+```
+
+- 위 처럼 나온 곳에서 `pick b69b523` 을 `edit b69b523` 으로 수정
+- `pick` 을 `edit` 으로 수정 후 저장
+
+예제)
+
+```bash
+pick bd3256d [커밋타입] 커밋 타이틀
+pick 189efb5 [docs] 깃허브 명령어를 공부하고 있음.
+pick b69b523 [docs] 깃허브 기본 사용 및 연결법
+edit d1c3309 [docs] 브랜치의 이해
+pick 8459f84 진행중
+```
+
+-실제 내용 수정 진행
+
+```bash
+git commit --amend 엔터
+
+수정 및 저장
+```
+
+- 마무리해서 main으로 이동하기
+
+```bash
+git rebase --continue
+```
+
+## 3. 깃허브에 commit 수정 내용 반영하기
+
+### 3.1. 바로 커밋 수정 후 바로 push 하기
+
+### 3.1. 이전 커밋 수정 후 push 하기
